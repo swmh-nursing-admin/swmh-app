@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#00843d">
+<title>SWMH Daily Nursmid Monitoring</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f8f4;color:#18323f}
+header{background:linear-gradient(135deg,#006b32,#00843d 55%,#00a651);color:#fff;padding:14px;text-align:center;border-bottom:5px solid #f9c900}
+header img{height:56px}header h1{font-size:18px;margin:4px 0 2px}header p{margin:0;font-size:12px}
+#st{font-size:11px;margin-top:4px}
+main{max-width:1000px;margin:auto;padding:12px}
+.card{background:#fff;border-radius:14px;padding:16px;margin-bottom:12px;box-shadow:0 2px 8px #0001}
+h2{margin:0 0 10px;color:#006b32}h3{margin:14px 0 6px;color:#006b32}
+button{border:0;border-radius:9px;padding:11px 15px;cursor:pointer;background:#00843d;color:#fff;font-weight:700;margin:2px}
+button.s{background:#e7f2ea;color:#006b32}
+.nav{display:flex;flex-wrap:wrap;margin-bottom:10px}.nav button{background:#e7f2ea;color:#006b32}.nav button.on{background:#00843d;color:#fff}
+input,select,textarea{width:100%;padding:11px;border:1px solid #c5d6c9;border-radius:9px;font-size:15px;margin:4px 0 10px}
+textarea{min-height:70px}label{font-weight:700;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.stat{background:#eef7f0;border-radius:12px;padding:12px}.stat b{display:block;font-size:26px}
+.item{border-bottom:1px solid #e3ece5;padding:10px 0}.sc{display:flex;gap:6px;margin:6px 0}
+.sc button{flex:1;background:#e7f2ea;color:#006b32;margin:0}.sc button.sel{background:#00843d;color:#fff}
+.m{font-size:12px;color:#5b7080}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:8px;border-bottom:1px solid #e3ece5;text-align:left}
+th{background:#eef7f0}.wrap{overflow-x:auto}
+.p{padding:2px 8px;border-radius:10px;font-weight:700;font-size:12px;color:#fff}
+.g{background:#00843d}.a{background:#d99100}.r{background:#c0392b}.pend{background:#888}
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#18323f;color:#fff;padding:11px 16px;border-radius:10px;display:none;z-index:9;max-width:90%}
+.warn{background:#fff3cd;border:1px solid #f0c36d;padding:10px;border-radius:10px;margin-bottom:10px;font-size:14px}
+</style></head><body>
+<header><img src="data:image/png;base64,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" alt=""><h1>SEFWI WIAWSO MUNICIPAL HOSPITAL</h1><p>DAILY NURSMID MONITORING AND SUPERVISION APP</p><div id="st"></div></header>
+<main id="app"></main><div id="toast"></div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+// ====== STEP 1: PASTE YOUR NEW FIREBASE CONFIG HERE ======
+const firebaseConfig={apiKey:"AIzaSyAvQZqFHaZfnXW780Nlr2S22e3Q2-rEcqI",authDomain:"swmh-monitoring.firebaseapp.com",projectId:"swmh-monitoring",storageBucket:"swmh-monitoring.firebasestorage.app",messagingSenderId:"729789344941",appId:"1:729789344941:web:ff66e4b744fa875f7d6a24"};
+// Must match the code inside your Firestore rules. Change it before sharing.
+const MANAGER_CODE="SWMH-MANAGER-2026";
+// =========================================================
+const units=["FW","MW","MAT","LAB","NICU","PACU","A&E","ANC","WELLNESS","RCH","PNC","MH","EYE","SC UNIT","THEATRE","OPD","KW","VCT"];
+const sections=[["Attendance",["Check and compare duty roster with staff present"]],["Appearance",["Prescribed uniform, apron, cap/scrub"]],["Balanced Daily Ward State",["Balanced daily ward state maintained"]],["Preparation for Ward Rounds",["Ward round trolley properly set","Patient files arranged","Change book updated"]],["Documentation",["Admission notes complete","Care plan written for all admitted patients","Care plan reviewed per shift","Emergency drug book","Laundry book","Hardcopy/manuscript documentation completed appropriately","GHIMS documentation completed after manuscript/hardcopy documentation","GHIMS entry corresponds with the hardcopy/manuscript record"]],["Assignment Book Utilization",["Assignment book utilized appropriately"]],["Ward Environment",["Beds well-arranged and clean","Floor clean and dry","Waste segregation practiced correctly","Equipment arranged properly"]],["Equipment & Supplies",["Oxygen supply functional","Suction machine working","Adequate gloves and consumables"]],["Infection Prevention and Control (IPC)",["Decontamination solution changed appropriately according to schedule/procedure","Demonstration of proper handwashing technique","Correct use of personal protective equipment (PPE)","Hand hygiene observed at appropriate moments of patient care"]]];
+const meanings=["Unacceptable — Immediate corrective action needed","Fairly Satisfactory — Below standard","Satisfactory — Meets minimum standard","Good — Above average compliance","Very Good — High standard maintained","Excellent — Outstanding practice"];
+const N=sections.reduce((a,s)=>a+s[1].length,0);
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let auth,db,me=null,mine=[],all=[],unsub=null,draft={},screen="home",mode="login",registering=false,viewId=null,fUnit="";
+function toast(t){const e=$("toast");e.textContent=t;e.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display="none",4500)}
+function net(){$("st").textContent=navigator.onLine?"● Online":"● Offline — assessments are saved on this device and upload automatically"}
+addEventListener("online",net);addEventListener("offline",net);net();
+const cls=p=>p>=80?"g":p>=60?"a":"r";
+const pill=p=>`<span class="p ${cls(p)}">${(+p).toFixed(1)}%</span>`;
+const fmt=d=>new Date(d).toLocaleString();
+const today=d=>new Date(d).toDateString()===new Date().toDateString();
+
+if(firebaseConfig.apiKey.startsWith("PASTE")){
+  $("app").innerHTML='<div class="card"><h2>Setup needed</h2><p>Open this file in a text editor and paste your Firebase config at the top of the script (STEP 1).</p></div>';
+}else{
+  firebase.initializeApp(firebaseConfig);auth=firebase.auth();db=firebase.firestore();
+  db.enablePersistence({synchronizeTabs:true}).catch(()=>{});
+  auth.onAuthStateChanged(async u=>{
+    if(registering)return;
+    if(!u){me=null;if(unsub)unsub();return renderAuth()}
+    try{const d=await db.collection("users").doc(u.uid).get();
+      if(!d.exists){await auth.signOut();return renderAuth()}
+      me={uid:u.uid,...d.data()};screen=me.role==="manager"?"dash":"home";listen();render();
+    }catch(e){toast("Could not load your profile: "+(e.code||e.message));renderAuth()}
+  });
+}
+function renderAuth(){
+  $("app").innerHTML=`<div class="card"><h2>${mode==="login"?"Login":"Create Account"}</h2>
+  ${mode==="reg"?`<label>Full name</label><input id="nm"><label>Role</label><select id="rl" onchange="$('mc').style.display=this.value==='manager'?'block':'none'"><option value="assessor">Assessor</option><option value="manager">Nurse Manager</option></select><div id="mc" style="display:none"><label>Manager registration code</label><input id="mcode" type="password"></div>`:""}
+  <label>Username</label><input id="un" autocapitalize="none"><label>Password (min 6 characters)</label><input id="pw" type="password">
+  <button onclick="${mode==="login"?"login()":"register()"}">${mode==="login"?"Login":"Register"}</button>
+  <button class="s" onclick="mode='${mode==="login"?"reg":"login"}';renderAuth()">${mode==="login"?"Create an account":"Back to login"}</button></div>`;
+}
+const mail=u=>u.trim().toLowerCase().replace(/[^a-z0-9._-]/g,"")+"@swmh-app.com";
+async function login(){
+  try{await auth.signInWithEmailAndPassword(mail($("un").value),$("pw").value)}
+  catch(e){toast(e.code==="auth/network-request-failed"?"No internet connection":"Wrong username or password")}
+}
+async function register(){
+  const name=$("nm").value.trim(),un=$("un").value.trim(),pw=$("pw").value,role=$("rl").value;
+  if(!name||!un||pw.length<6)return toast("Enter name, username and a password of 6+ characters");
+  registering=true;
+  try{
+    const c=await auth.createUserWithEmailAndPassword(mail(un),pw);
+    const doc={name,username:un.toLowerCase(),role,createdAt:new Date().toISOString()};
+    if(role==="manager")doc.managerCode=$("mcode").value;
+    try{await db.collection("users").doc(c.user.uid).set(doc)}
+    catch(e){await c.user.delete();throw{code:"bad-code"}}
+    registering=false;toast("Account created");
+    me={uid:c.user.uid,...doc};delete me.managerCode;screen=role==="manager"?"dash":"home";listen();render();
+  }catch(e){registering=false;
+    toast(e.code==="bad-code"?"Wrong manager code":e.code==="auth/email-already-in-use"?"Username already taken":e.code==="auth/network-request-failed"?"No internet connection":"Registration failed: "+(e.code||e.message))}
+}
+function listen(){
+  if(unsub)unsub();const c=db.collection("assessments");
+  if(me.role==="manager")unsub=c.orderBy("date","desc").limit(1000).onSnapshot(s=>{all=s.docs.map(d=>({...d.data(),id:d.id}));refresh()},e=>toast("Cannot load records: "+e.code));
+  else unsub=c.where("assessorUid","==",me.uid).onSnapshot({includeMetadataChanges:true},s=>{mine=s.docs.map(d=>({...d.data(),id:d.id,pending:d.metadata.hasPendingWrites}));mine.sort((a,b)=>b.date.localeCompare(a.date));refresh()},e=>toast("Cannot load records: "+e.code));
+}
+function refresh(){if(me&&screen!=="new")render()}
+function go(s,id){screen=s;viewId=id||null;render();scrollTo(0,0)}
+function logout(){if(unsub)unsub();auth.signOut()}
+function render(){
+  const m=me.role==="manager";
+  const tabs=m?[["dash","Dashboard"],["records","All Records"]]:[["home","Home"],["new","New Assessment"],["history","My History"]];
+  let h=`<div class="nav">${tabs.map(t=>`<button class="${screen===t[0]?"on":""}" onclick="go('${t[0]}')">${t[1]}</button>`).join("")}<button onclick="logout()">Logout</button></div>`;
+  h+=({home,new:newForm,history,dash,records,detail}[screen]||home)();
+  $("app").innerHTML=h;
+}
+function home(){const p=mine.filter(x=>x.pending).length;
+  return`<div class="card"><h2>Welcome, ${esc(me.name)}</h2><div class="grid"><div class="stat">My submissions<b>${mine.length}</b></div><div class="stat">Pending upload<b>${p}</b></div><div class="stat">Units<b>${units.length}</b></div></div><p><button onclick="go('new')">Start New Assessment</button><button class="s" onclick="go('history')">View History</button></p></div>`}
+function newForm(){
+  if(!draft.scores)draft={scores:{}};
+  let h=`<div class="card"><h2>New Daily Assessment</h2><label>Unit/Ward</label><select id="unit"><option value="">Select unit/ward</option>${units.map(u=>`<option>${esc(u)}</option>`).join("")}</select><label>Shift</label><select id="shift"><option value="">Select shift</option><option>Morning Shift</option><option>Afternoon Shift</option></select>`;
+  sections.forEach((s,i)=>{h+=`<h3>${i+1}. ${esc(s[0])}</h3>`;s[1].forEach((t,j)=>{const k=i+"-"+j;h+=`<div class="item"><b>${esc(t)}</b><div class="sc">${[0,1,2,3,4,5].map(n=>`<button id="b${k}_${n}" onclick="sc('${k}',${n})">${n}</button>`).join("")}</div><span class="m" id="m${k}">Select a score</span></div>`})});
+  return h+`<label>Overall observations / corrective action notes</label><textarea id="cm"></textarea><label>Evidence reference (optional)</label><textarea id="ev"></textarea><button onclick="submit()">Submit Assessment</button><button class="s" onclick="draft={};go('home')">Cancel</button></div>`;
+}
+function sc(k,n){draft.scores[k]=n;for(let i=0;i<6;i++)$("b"+k+"_"+i).classList.toggle("sel",i===n);$("m"+k).textContent=n+" — "+meanings[n]}
+function submit(){
+  const unit=$("unit").value,shift=$("shift").value;
+  if(!unit)return toast("Select a unit/ward");if(!shift)return toast("Select a shift");
+  if(Object.keys(draft.scores).length<N)return toast("Score every indicator before submitting");
+  const total=Object.values(draft.scores).reduce((a,b)=>a+b,0);
+  const x={unit,shift,assessorUid:me.uid,assessorName:me.name,date:new Date().toISOString(),scores:draft.scores,total,max:N*5,average:+(total/N).toFixed(2),percentage:+(total/(N*5)*100).toFixed(1),comments:$("cm").value,evidence:$("ev").value};
+  db.collection("assessments").doc().set(x).catch(e=>toast("Upload failed: "+e.code));
+  draft={};toast(navigator.onLine?"Assessment submitted":"Saved on this device. It will upload when internet returns.");go("history");
+}
+function tbl(a,showWho){
+  return a.length?`<div class="wrap"><table><tr><th>Date</th>${showWho?"<th>Assessor</th>":""}<th>Unit</th><th>Shift</th><th>Avg</th><th>%</th><th>Status</th><th></th></tr>${a.map(x=>`<tr><td>${fmt(x.date)}</td>${showWho?`<td>${esc(x.assessorName)}</td>`:""}<td>${esc(x.unit)}</td><td>${esc(x.shift)}</td><td>${x.average}</td><td>${pill(x.percentage)}</td><td>${x.pending?'<span class="p pend">Pending</span>':'<span class="p g">Synced</span>'}</td><td><button class="s" onclick="go('detail','${x.id}')">View</button></td></tr>`).join("")}</table></div>`:"<p>No assessments yet.</p>";
+}
+function history(){return`<div class="card"><h2>My Assessment History</h2>${tbl(mine,false)}</div>`}
+function dash(){
+  const n=all.length,avg=n?all.reduce((a,x)=>a+x.percentage,0)/n:0,td=all.filter(x=>today(x.date));
+  const done=new Set(td.map(x=>x.unit)),miss=units.filter(u=>!done.has(u));
+  const rows=units.map(u=>{const a=all.filter(x=>x.unit===u);return{u,c:a.length,p:a.length?a.reduce((s,x)=>s+x.percentage,0)/a.length:null,l:a[0]?fmt(a[0].date):"—"}});
+  return`<div class="card"><h2>Nurse Manager Dashboard</h2><div class="grid"><div class="stat">Total assessments<b>${n}</b></div><div class="stat">Average score<b>${avg.toFixed(1)}%</b></div><div class="stat">Assessed today<b>${done.size}/${units.length}</b></div><div class="stat">Below 60%<b>${all.filter(x=>x.percentage<60).length}</b></div></div>
+  <h3>Units not yet assessed today</h3><p>${miss.length?miss.map(esc).join(", "):"All units assessed ✔"}</p>
+  <h3>Performance by unit</h3><div class="wrap"><table><tr><th>Unit</th><th>Assessments</th><th>Average</th><th>Latest</th></tr>${rows.map(r=>`<tr><td>${esc(r.u)}</td><td>${r.c}</td><td>${r.p===null?"—":pill(r.p)}</td><td>${r.l}</td></tr>`).join("")}</table></div>
+  <h3>Recent submissions</h3>${tbl(all.slice(0,10),true)}</div>`;
+}
+function records(){
+  const a=fUnit?all.filter(x=>x.unit===fUnit):all;
+  return`<div class="card"><h2>All Records</h2><select onchange="fUnit=this.value;render()"><option value="">All units</option>${units.map(u=>`<option ${u===fUnit?"selected":""}>${esc(u)}</option>`).join("")}</select><button onclick="csv()">Export CSV</button>${tbl(a,true)}</div>`;
+}
+function csv(){
+  const L=["Date,Assessor,Unit,Shift,Total,Max,Average,Percentage,Comments"];
+  all.forEach(x=>L.push([x.date,x.assessorName,x.unit,x.shift,x.total,x.max,x.average,x.percentage,JSON.stringify(x.comments||"")].map(v=>/[",\n]/.test(v)?'"'+String(v).replace(/"/g,'""')+'"':v).join(",")));
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([L.join("\n")],{type:"text/csv"}));a.download="SWMH_assessments.csv";a.click();
+}
+function detail(){
+  const x=(me.role==="manager"?all:mine).find(r=>r.id===viewId);if(!x)return"<div class='card'>Record not found.</div>";
+  let h=`<div class="card"><h2>Assessment Detail</h2><p><b>Unit:</b> ${esc(x.unit)} &nbsp;<b>Shift:</b> ${esc(x.shift)} &nbsp;<b>Assessor:</b> ${esc(x.assessorName)}<br><b>Date:</b> ${fmt(x.date)} &nbsp;<b>Score:</b> ${x.total}/${x.max} ${pill(x.percentage)}</p>`;
+  sections.forEach((s,i)=>{h+=`<h3>${i+1}. ${esc(s[0])}</h3>`;s[1].forEach((t,j)=>{const v=x.scores[i+"-"+j];h+=`<div class="item">${esc(t)}<br><b>${v}</b> <span class="m">${meanings[v]||""}</span></div>`})});
+  return h+`<h3>Observations</h3><p>${esc(x.comments)||"—"}</p><h3>Evidence</h3><p>${esc(x.evidence)||"—"}</p><button class="s" onclick="go('${me.role==="manager"?"records":"history"}')">Back</button></div>`;
+}
+if(!auth&&!firebaseConfig.apiKey.startsWith("PASTE"))renderAuth();
+</script></body></html>
