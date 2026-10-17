@@ -126,7 +126,7 @@ function renderAuth(){$("fab").style.display="none";document.querySelector("head
   ${mode==="reg"?`<label>Full name</label><input id="nm"><label>Role</label><select id="rl" onchange="$('mc').style.display=this.value==='manager'?'block':'none'"><option value="assessor">Assessor</option><option value="manager">Nurse Manager</option></select><div id="mc" style="display:none"><label>Manager registration code</label><div class="pw"><input id="mcode" type="password"><button type="button" class="s" onclick="tp('mcode',this)">Show</button></div></div>`:""}
   <label>Username</label><input id="un" autocapitalize="none"><label>Password (min 6 characters)</label><div class="pw"><input id="pw" type="password"><button type="button" class="s" onclick="tp('pw',this)">Show</button></div>
   <button onclick="${mode==="login"?"login()":"register()"}">${mode==="login"?"Login":"Register"}</button>
-  <button class="s" onclick="mode='${mode==="login"?"reg":"login"}';renderAuth()">${mode==="login"?"Create an account":"Back to login"}</button></div>`;
+  <button class="s" onclick="mode='${mode==="login"?"reg":"login"}';renderAuth()">${mode==="login"?"Create an account":"Back to login"}</button></div><div class="card"><button style="width:100%" onclick="pub('sched')">📅 Supervision Schedule</button><p class="m" style="margin:8px 0 0;text-align:center">View the night and weekend supervision schedules without logging in.</p></div>`;
 }
 function tp(id,b){const i=$(id),h=i.type==="password";i.type=h?"text":"password";b.textContent=h?"Hide":"Show"}
 const mail=u=>u.trim().toLowerCase().replace(/[^a-z0-9._-]/g,"")+"@swmh-app.com";
@@ -220,10 +220,11 @@ const pdt=s=>{const[a,b,c]=s.trim().split("/");return new Date(2000+ +c,+b-1,+a)
 function curRow(k){const n=new Date(),t0=new Date(n.getFullYear(),n.getMonth(),n.getDate()),r=SCH[k].r;
   if(k==="night")return r.findIndex(x=>{const[a,b]=x[0].split(" – ");return t0>=pdt(a)&&t0<=pdt(b)});
   return r.findIndex(x=>pdt(x[0])>=t0)}
-function sched(){const back=me.role==="manager"?"dash":"home";
-  return`<div class="card nv"><h2>📅 Supervision Schedule</h2><p class="m">Choose a schedule to view.</p><button class="big" style="background:linear-gradient(135deg,#1e3a8a,#2f80ed)" onclick="go('night')">🌙 Night Supervision Schedule</button><button class="big" style="background:linear-gradient(135deg,#f26b21,#ff9a3c)" onclick="go('weekend')">🗓️ Weekend Supervision Schedule</button><button class="s" style="width:100%" onclick="go('${back}')">Back</button></div>`}
+function pub(s){screen=s;$("fab").style.display="none";document.querySelector("header").classList.remove("on");$("app").innerHTML=({sched,night,weekend}[s]||sched)();scrollTo(0,0)}
+function sched(){const P=!me,g=P?"pub":"go",bk=P?"renderAuth()":`go('${me.role==="manager"?"dash":"home"}')`;
+  return`<div class="card nv"><h2>📅 Supervision Schedule</h2><p class="m">Choose a schedule to view.</p><button class="big" style="background:linear-gradient(135deg,#1e3a8a,#2f80ed)" onclick="${g}('night')">🌙 Night Supervision Schedule</button><button class="big" style="background:linear-gradient(135deg,#f26b21,#ff9a3c)" onclick="${g}('weekend')">🗓️ Weekend Supervision Schedule</button><button class="s" style="width:100%" onclick="${bk}">Back</button></div>`}
 function schTbl(k){const d=SCH[k],c=curRow(k);
-  return`<div class="card nv"><div class="sh2"><b>SEFWI WIAWSO MUNICIPAL HOSPITAL</b><b>NURSING ADMINISTRATION</b><b>${d.t}</b><b>${d.p}</b></div><div class="wrap"><table><tr><th>NO</th><th>DATE</th><th>NAME OF OFFICER</th></tr>${d.r.map((x,i)=>`<tr class="${i===c?"curr":""}"><td>${i+1}.</td><td>${x[0]}</td><td>${x[1]}${i===c?` <span class="p g">${k==="night"?"This week":"Next"}</span>`:""}</td></tr>`).join("")}</table></div><button class="s" style="width:100%;margin-top:12px" onclick="go('sched')">Back</button></div>`}
+  return`<div class="card nv"><div class="sh2"><b>SEFWI WIAWSO MUNICIPAL HOSPITAL</b><b>NURSING ADMINISTRATION</b><b>${d.t}</b><b>${d.p}</b></div><div class="wrap"><table><tr><th>NO</th><th>DATE</th><th>NAME OF OFFICER</th></tr>${d.r.map((x,i)=>`<tr class="${i===c?"curr":""}"><td>${i+1}.</td><td>${x[0]}</td><td>${x[1]}${i===c?` <span class="p g">${k==="night"?"This week":"Next"}</span>`:""}</td></tr>`).join("")}</table></div><button class="s" style="width:100%;margin-top:12px" onclick="${me?"go":"pub"}('sched')">Back</button></div>`}
 const night=()=>schTbl("night"),weekend=()=>schTbl("weekend");
 const selU=()=>F.us&&F.us.length?F.us:units;
 const fltU=a=>flt(a,1).filter(x=>!(F.us&&F.us.length)||F.us.includes(x.unit));
